@@ -1,3 +1,5 @@
+由于种种原因(不能确定是否完全由我的环境不同导致)，原仓库的版本本人无法使用，故做了一些修改以使其能在我的环境下运行。
+
 # pstdio
 
 A GDB plug-in that can set stdio of the program you debug.
