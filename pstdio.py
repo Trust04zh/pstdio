@@ -1,7 +1,12 @@
 import gdb
 import os
 import sys
+# from invoke.program import Program
 
+# Program.normalize_argv()
+
+msg = print
+trim = str.strip
 
 class Pstdio(object):
     def __init__(self):
@@ -121,8 +126,8 @@ class Pstdio(object):
         Usage:
             pstdio help
         '''
-
-        (cmd,) = normalize_argv(arg, 1)
+        # (cmd,) = normalize_argv(arg, 1)
+        cmd = self.normalize_argv(arg, 1)
         helptext = ""
         if cmd is None:
             helptext = 'Set stdio of the program.\n'
@@ -132,6 +137,7 @@ class Pstdio(object):
                 func = getattr(self, cmd)
                 helptext += "%s -- %s\n" % (cmd, trim(func.__doc__.strip("\n").splitlines()[0]))
         else:
+            cmd = cmd[0]
             if cmd in self.commands:
                 func = getattr(self, cmd)
                 lines = trim(func.__doc__).splitlines()
@@ -145,6 +151,15 @@ class Pstdio(object):
                         helptext += "%s -- %s\n" % (c, trim(func.__doc__.strip("\n").splitlines()[0]))
 
         msg(helptext)
+
+    def normalize_argv(self, arg : tuple, index):
+        '''
+        A fake normalize_argv method
+        '''
+        if len(arg) == 0:
+            return None
+        else:
+            return arg[index - 1].strip()
 
 
 class PstdioCommand(gdb.Command):
