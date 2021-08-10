@@ -32,21 +32,23 @@ class Pstdio(object):
         else:
             enable_hex = False
             data = arg[0]
+            data = bytes(data, encoding = 'ascii')
         if enable_hex:
-            hexed_data = ''
+            hexed_data = b''
             i = 0
             while i < len(data):
                 if i+3 < len(data) and data[i] == '\\' and data[i+1].upper() == 'X':
                     try:
-                        hexed_data += chr(int(data[i+2]+data[i+3], 16))
+                        hexed_data += int(data[i+2]+data[i+3], 16).to_bytes(1, 'little')
                         i += 4
-                    except ValueError as e: 
-                        hexed_data += data[i]
+                    except ValueError as e:
+                        hexed_data += bytes(data[i], encoding = 'ascii')
                         i += 1
                 else:
-                    hexed_data += data[i]
+                    hexed_data += bytes(data[i], encoding = 'ascii')
                     i += 1
             data = hexed_data
+            # data = bytes([ord(c) for c in hexed_data])
 
         with open(tmp_file, "wb") as f:
             f.write(data)
